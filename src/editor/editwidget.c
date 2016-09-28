@@ -756,6 +756,7 @@ edit_dialog_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, v
     {
     case MSG_INIT:
         edit_dlg_init ();
+        group_default_callback (w, NULL, MSG_INIT, 0, NULL);
         return MSG_HANDLED;
 
     case MSG_DRAW:

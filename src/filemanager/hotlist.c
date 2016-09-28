@@ -573,6 +573,9 @@ hotlist_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void 
     switch (msg)
     {
     case MSG_INIT:
+        group_default_callback (w, NULL, MSG_INIT, 0, NULL);
+        MC_FALLTHROUGH;
+
     case MSG_NOTIFY:           /* MSG_NOTIFY is fired by the listbox to tell us the item has changed. */
         update_path_name ();
         return MSG_HANDLED;
