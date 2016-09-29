@@ -17,7 +17,8 @@ endif
 
 TESTS = \
 	complete_engine \
-	group_init_destroy
+	group_init_destroy \
+	widget_find_by_id
 
 check_PROGRAMS = $(TESTS)
 
@@ -26,3 +27,6 @@ complete_engine_SOURCES = \
 
 group_init_destroy_SOURCES = \
 	group_init_destroy.c
+
+widget_find_by_id_SOURCES = \
+	widget_find_by_id.c
