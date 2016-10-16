@@ -610,7 +610,7 @@ hotlist_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void 
             if (!widget_get_state (lst, WST_FOCUSED))
                 widget_select (lst);
             else
-                widget_redraw (lst);
+                widget_draw (lst);
         }
         return MSG_HANDLED;
 
