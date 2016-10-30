@@ -618,7 +618,7 @@ help_help (WDialog * h)
     {
         currentpoint = p + 1;   /* Skip the newline following the start of the node */
         selected_item = NULL;
-        dlg_redraw (h);
+        widget_draw (WIDGET (h));
     }
 }
 
@@ -641,7 +641,7 @@ help_index (WDialog * h)
 
         currentpoint = new_item + 1;    /* Skip the newline following the start of the node */
         selected_item = NULL;
-        dlg_redraw (h);
+        widget_draw (WIDGET (h));
     }
 }
 
@@ -656,7 +656,7 @@ help_back (WDialog * h)
     if (history_ptr < 0)
         history_ptr = HISTORY_SIZE - 1;
 
-    dlg_redraw (h);       /* FIXME: unneeded? */
+    widget_draw (WIDGET (h));   /* FIXME: unneeded? */
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -855,7 +855,8 @@ help_handle_key (WDialog * h, int c)
     if ((command == CK_IgnoreKey) || (help_execute_cmd (command) == MSG_NOT_HANDLED))
         return MSG_NOT_HANDLED;
 
-    dlg_redraw (h);
+    widget_draw (WIDGET (h));
+
     return MSG_HANDLED;
 }
 
@@ -1039,7 +1040,7 @@ help_mouse_callback (Widget * w, mouse_msg_t msg, mouse_event_t * event)
         move_forward (1);
 
     /* Show the new node */
-    dlg_redraw (DIALOG (w->owner));
+    widget_draw (WIDGET (w->owner));
 }
 
 /* --------------------------------------------------------------------------------------------- */

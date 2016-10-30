@@ -770,7 +770,7 @@ check_progress_buttons (file_op_context_t * ctx)
         {
             /* redraw dialog in case of Skip after Suspend */
             place_progress_buttons (ui->op_dlg, FALSE);
-            dlg_redraw (ui->op_dlg);
+            widget_draw (WIDGET (ui->op_dlg));
         }
         ctx->suspended = FALSE;
         return FILE_SKIP;
@@ -781,7 +781,7 @@ check_progress_buttons (file_op_context_t * ctx)
     case FILE_SUSPEND:
         ctx->suspended = !ctx->suspended;
         place_progress_buttons (ui->op_dlg, ctx->suspended);
-        dlg_redraw (ui->op_dlg);
+        widget_draw (WIDGET (ui->op_dlg));
         MC_FALLTHROUGH;
     default:
         if (ctx->suspended)
