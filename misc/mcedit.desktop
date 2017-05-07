@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=mcedit
+GenericName=Text Editor
+GenericName[ru]=Текстовый редактор
+Comment=Internal file editor of GNU Midnight Commander
+Comment[ru]=Встроенный текстовый редактор GNU Midnight Commander
+Icon=mc
+Exec=mcedit
+Terminal=true
+Categories=ConsoleOnly;Utility;TextEditor;

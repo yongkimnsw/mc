@@ -40,13 +40,24 @@ cfg_DATA = \
 cfg_SCRIPTS = \
 	$(LIBFILES_SCRIPT)
 
+iconsdir = $(datarootdir)/icons/hicolor/scalable/apps
+icons_DATA = \
+	mc.svg
+
+freedesktopdir = $(datarootdir)/applications
+freedesktop_DATA = \
+	mc.freedesktop \
+	mcedit.freedesktop
+
 # Files processed by configure don't need to be here
 EXTRA_DIST = \
 	$(LIBFILES_CONST) \
 	$(LIBFILES_SCRIPT) \
 	$(SCRIPTS_IN) \
 	$(noinst_DATA) \
-	$(pkgdata_DATA)
+	$(pkgdata_DATA) \
+	$(icons_DATA) \
+	$(freedesktop_DATA)
 #if CHARSET is defined, mc.charsets is already here
 if !CHARSET
 EXTRA_DIST += mc.charsets
