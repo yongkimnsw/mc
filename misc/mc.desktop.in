@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+_Name=Midnight Commander
+_Comment=File manager
+Exec=mc
+Icon=mc
+Terminal=true
+Type=Application
+Categories=ConsoleOnly;Utility;FileManager;
+# vi: encoding=utf-8

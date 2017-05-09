@@ -1,1 +1,3 @@
 mc.ext
+*.desktop.in.h
+*.desktop

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+_Name=MCEdit
+_Comment=Internal file editor of GNU Midnight Commander
+Exec=mcedit
+Icon=mc
+Terminal=true
+Type=Application
+Categories=ConsoleOnly;Utility;TextEditor;
+# vi: encoding=utf-8

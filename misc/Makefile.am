@@ -25,11 +25,8 @@ LIBFILES_CONST = \
 	mc.default.keymap \
 	mc.emacs.keymap
 
-
 LIBFILES_SCRIPT = \
 	edit.indent.rc
-
-CLEANFILES = $(SCRIPTS_OUT)
 
 cfgdir = $(sysconfdir)/@PACKAGE@
 cfg_DATA = \
@@ -48,6 +45,16 @@ desktopdir = $(datadir)/applications
 desktop_DATA = \
 	mc.desktop \
 	mcedit.desktop
+dist_noinst_DATA = \
+	mc.desktop.in \
+	mcedit.desktop.in
+
+# We're not using the INTLTOOL_DESKTOP_RULE macro because it expects us
+# to run intltoolize on the source tree and it breaks when builddir != srcdir.
+# (https://mail.gnome.org/archives/commits-list/2010-October/msg05148.html)
+%.desktop: %.desktop.in
+	$(MKDIR_P) $(dir $@)
+	LC_ALL=C $(INTLTOOL_MERGE) --desktop-style --utf8 --cache $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< $@
 
 # Files processed by configure don't need to be here
 EXTRA_DIST = \
@@ -62,6 +69,11 @@ EXTRA_DIST = \
 if !CHARSET
 EXTRA_DIST += mc.charsets
 endif
+
+CLEANFILES = \
+	$(SCRIPTS_OUT) \
+	$(desktop_in_files) \
+	$(desktop_DATA)
 
 install-data-hook:
 	cd $(DESTDIR)$(cfgdir) && rm -f mc.keymap && $(LN_S) mc.default.keymap mc.keymap

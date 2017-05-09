@@ -270,6 +270,12 @@ dnl ############################################################################
 AM_GNU_GETTEXT([no-libtool], [need-ngettext])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
+IT_PROG_INTLTOOL([0.40])
+dnl Required for Intltool
+GETTEXT_PACKAGE=$PACKAGE
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Gettext package])
+
 mc_I18N
 
 dnl ############################################################################
