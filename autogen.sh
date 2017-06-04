@@ -6,8 +6,8 @@ srcdir="$(cd "$(dirname "$0")" && pwd)"
 
 cd "$srcdir"
 
+export AUTOPOINT='intltoolize --copy --automake'
 ${AUTORECONF:-autoreconf} --verbose --install --force -I m4 ${AUTORECONF_FLAGS}
-${INTLTOOLIZE:-intltoolize} --copy --force --automake
 
 # Customize the INSTALL file
 rm -f INSTALL && ln -s doc/INSTALL
