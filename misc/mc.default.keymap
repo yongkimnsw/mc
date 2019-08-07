@@ -60,6 +60,7 @@ ExtendedKeyMap = ctrl-x
 [main:xmap]
 ChangeMode = c
 ChangeOwn = o
+# ChangeAttributes =
 CompareDirs = d
 CompareFiles = ctrl-d
 HotListAdd = h

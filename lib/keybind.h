@@ -67,6 +67,7 @@ enum
     CK_ChangeMode,
     CK_ChangeOwn,
     CK_ChangeOwnAdvanced,
+    CK_ChangeAttributes,
     CK_Remove,
     CK_BackSpace,
     CK_Redo,
