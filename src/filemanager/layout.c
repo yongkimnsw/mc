@@ -774,7 +774,7 @@ setup_panels (void)
     }
 
     widget_set_size (WIDGET (the_bar), LINES - 1, 0, mc_global.keybar_visible, COLS);
-    buttonbar_set_visible (the_bar, mc_global.keybar_visible);
+    widget_set_state (WIDGET (the_bar), WST_VISIBLE, mc_global.keybar_visible);
 
     /* Output window */
     if (mc_global.tty.console_flag != '\0' && output_lines)
