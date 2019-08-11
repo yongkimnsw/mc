@@ -337,8 +337,7 @@ widget_set_size (Widget * widget, int y, int x, int lines, int cols)
     widget->cols = cols;
     widget->lines = lines;
     send_message (widget, NULL, MSG_RESIZE, 0, NULL);
-    if (widget->owner != NULL && widget_get_state (WIDGET (widget->owner), WST_ACTIVE))
-        send_message (widget, NULL, MSG_DRAW, 0, NULL);
+    widget_redraw (widget);
 }
 
 /* --------------------------------------------------------------------------------------------- */
