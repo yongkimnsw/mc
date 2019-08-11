@@ -467,6 +467,14 @@ widget_replace (Widget * old_w, Widget * new_w)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+
+gboolean
+widget_is_focusable (const Widget * w)
+{
+    return (widget_get_options (w, WOP_SELECTABLE) && !widget_get_state (w, WST_DISABLED));
+}
+
+/* --------------------------------------------------------------------------------------------- */
 /**
  * Select specified widget in it's owner.
  *

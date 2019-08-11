@@ -126,15 +126,12 @@ dlg_select_next_or_prev (WDialog * h, gboolean next)
     if (h->widgets != NULL && h->current != NULL)
     {
         GList *l = h->current;
-        Widget *w;
 
         do
         {
             l = dlg_get_next_or_prev_of (l, next);
-            w = WIDGET (l->data);
         }
-        while ((widget_get_state (w, WST_DISABLED) || !widget_get_options (w, WOP_SELECTABLE))
-               && l != h->current);
+        while (!widget_is_focusable (l->data) && l != h->current);
 
         widget_select (l->data);
     }
@@ -361,7 +358,7 @@ dlg_mouse_event (WDialog * h, Gpm_Event * event)
     {
         Widget *w = WIDGET (p->data);
 
-        if (!widget_get_state (w, WST_DISABLED) && w->mouse_callback != NULL)
+        if (widget_is_focusable (w) && w->mouse_callback != NULL)
         {
             /* put global cursor position to the widget */
             int ret;
@@ -433,7 +430,7 @@ dlg_try_hotkey (WDialog * h, int d_key)
         current = WIDGET (hot_cur->data);
 
         if (widget_get_options (current, WOP_WANT_HOTKEY)
-            && !widget_get_state (current, WST_DISABLED))
+            && widget_is_focusable (current))
             handled = send_message (current, NULL, MSG_HOTKEY, d_key, NULL);
 
         if (handled == MSG_NOT_HANDLED)
@@ -1055,7 +1052,7 @@ update_cursor (WDialog * h)
     {
         Widget *w = WIDGET (p->data);
 
-        if (!widget_get_state (w, WST_DISABLED) && widget_get_options (w, WOP_WANT_CURSOR))
+        if (widget_is_focusable (w) && widget_get_options (w, WOP_WANT_CURSOR))
             send_message (w, NULL, MSG_CURSOR, 0, NULL);
         else
             do
@@ -1066,7 +1063,7 @@ update_cursor (WDialog * h)
 
                 w = WIDGET (p->data);
 
-                if (!widget_get_state (w, WST_DISABLED) && widget_get_options (w, WOP_WANT_CURSOR)
+                if (widget_is_focusable (w) && widget_get_options (w, WOP_WANT_CURSOR)
                     && send_message (w, NULL, MSG_CURSOR, 0, NULL) == MSG_HANDLED)
                     break;
             }
@@ -1131,8 +1128,7 @@ dlg_init (WDialog * h)
     }
 
     /* Select the first widget that takes focus */
-    while (h->current != NULL && !widget_get_options (WIDGET (h->current->data), WOP_SELECTABLE)
-           && !widget_get_state (WIDGET (h->current->data), WST_DISABLED))
+    while (h->current != NULL && !widget_is_focusable (h->current->data))
         dlg_set_current_widget_next (h);
 
     widget_set_state (wh, WST_ACTIVE, TRUE);
