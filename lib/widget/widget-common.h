@@ -79,10 +79,11 @@ typedef enum
 typedef enum
 {
     WST_DEFAULT = (0 << 0),
-    WST_DISABLED = (1 << 0),    /* Widget cannot be selected */
-    WST_IDLE = (1 << 1),
-    WST_MODAL = (1 << 2),       /* Widget (dialog) is modal */
-    WST_FOCUSED = (1 << 3),
+    WST_VISIBLE =  (1 << 0),    /* Widget is visible */
+    WST_DISABLED = (1 << 1),    /* Widget cannot be selected */
+    WST_IDLE = (1 << 2),
+    WST_MODAL = (1 << 3),       /* Widget (dialog) is modal */
+    WST_FOCUSED = (1 << 4),
 
     WST_CONSTRUCT = (1 << 15),  /* Dialog has been constructed but not run yet */
     WST_ACTIVE = (1 << 16),     /* Dialog is visible and active */
@@ -185,6 +186,8 @@ void widget_set_size (Widget * widget, int y, int x, int lines, int cols);
 void widget_selectcolor (Widget * w, gboolean focused, gboolean hotkey);
 void widget_redraw (Widget * w);
 void widget_erase (Widget * w);
+void widget_show (Widget * w);
+void widget_hide (Widget * w);
 gboolean widget_is_active (const void *w);
 gboolean widget_overlapped (const Widget * a, const Widget * b);
 void widget_replace (Widget * old, Widget * new);

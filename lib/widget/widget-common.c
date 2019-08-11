@@ -60,7 +60,7 @@
 static void
 widget_do_focus (Widget * w, gboolean enable)
 {
-    if (w != NULL && widget_get_state (WIDGET (w->owner), WST_FOCUSED))
+    if (w != NULL && widget_get_state (WIDGET (w->owner), WST_VISIBLE | WST_FOCUSED))
         widget_set_state (w, WST_FOCUSED, enable);
 }
 
@@ -210,7 +210,7 @@ widget_init (Widget * w, int y, int x, int lines, int cols,
     w->mouse.last_buttons_down = 0;
 
     w->options = WOP_DEFAULT;
-    w->state = WST_DEFAULT;
+    w->state = WST_VISIBLE;
 }
 
 /* --------------------------------------------------------------------------------------------- */
@@ -299,6 +299,21 @@ widget_set_state (Widget * w, widget_state_t state, gboolean enable)
 
     switch (state)
     {
+    case WST_VISIBLE:
+        if (enable)
+            widget_redraw (w);
+        else
+        {
+            /* redraw dialog to clear widget */
+            dlg_redraw (DIALOG (w->owner));
+            /* try select another widget if current one got hidden */
+            if (w == w->owner->current->data)
+                dlg_select_next_widget (w->owner);
+
+            update_cursor (w->owner);       /* FIXME: unneeded? */
+        }
+        break;
+
     case WST_DISABLED:
         ret = send_message (w, NULL, enable ? MSG_DISABLE : MSG_ENABLE, 0, NULL);
         if (ret == MSG_HANDLED && widget_get_state (WIDGET (w->owner), WST_ACTIVE))
@@ -378,6 +393,24 @@ widget_erase (Widget * w)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+
+void
+widget_show (Widget * w)
+{
+    if ((w->state & WST_VISIBLE) == 0)
+        widget_set_state (w, WST_VISIBLE, TRUE);
+}
+
+/* --------------------------------------------------------------------------------------------- */
+
+void
+widget_hide (Widget * w)
+{
+    if ((w->state & WST_VISIBLE) != 0)
+        widget_set_state (w, WST_VISIBLE, FALSE);
+}
+
+/* --------------------------------------------------------------------------------------------- */
 /**
   * Check whether widget is active or not.
   * @param w the widget
@@ -396,7 +429,7 @@ widget_is_active (const void *w)
 void
 widget_redraw (Widget * w)
 {
-    if (w != NULL)
+    if (w != NULL && widget_get_state (w, WST_VISIBLE))
     {
         WDialog *h = w->owner;
 
@@ -471,7 +504,8 @@ widget_replace (Widget * old_w, Widget * new_w)
 gboolean
 widget_is_focusable (const Widget * w)
 {
-    return (widget_get_options (w, WOP_SELECTABLE) && !widget_get_state (w, WST_DISABLED));
+    return (widget_get_options (w, WOP_SELECTABLE) && widget_get_state (w, WST_VISIBLE) &&
+            !widget_get_state (w, WST_DISABLED));
 }
 
 /* --------------------------------------------------------------------------------------------- */

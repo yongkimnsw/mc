@@ -165,7 +165,9 @@ dlg_broadcast_msg_to (WDialog * h, widget_msg_t msg, gboolean reverse, widget_op
         p = dlg_get_next_or_prev_of (p, !reverse);
 
         if ((flags == 0) || ((flags & w->options) != 0))
-            send_message (w, NULL, msg, 0, NULL);
+            /* special case: don't draw invisible widgets */
+            if (msg != MSG_DRAW || widget_get_state (w, WST_VISIBLE))
+                send_message (w, NULL, msg, 0, NULL);
     }
     while (first != p);
 }
@@ -398,7 +400,7 @@ dlg_try_hotkey (WDialog * h, int d_key)
 
     current = WIDGET (h->current->data);
 
-    if (widget_get_state (current, WST_DISABLED))
+    if (!widget_get_state (current, WST_VISIBLE) || widget_get_state (current, WST_DISABLED))
         return MSG_NOT_HANDLED;
 
     if (widget_get_options (current, WOP_IS_INPUT))
