@@ -785,10 +785,8 @@ setup_panels (void)
                                LINES - mc_global.keybar_visible - 1);
     }
 
-    if (mc_global.message_visible)
-        widget_set_size (WIDGET (the_hint), height + start_y, 0, 1, COLS);
-    else
-        widget_set_size (WIDGET (the_hint), 0, 0, 0, 0);
+    widget_set_size (WIDGET (the_hint), height + start_y, 0, 1, COLS);
+    widget_set_state (WIDGET (the_hint), WST_VISIBLE, mc_global.message_visible);
 
     update_xterm_title_path ();
 }
