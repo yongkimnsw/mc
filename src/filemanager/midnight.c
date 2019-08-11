@@ -1641,7 +1641,7 @@ update_menu (void)
     menu_set_name (left_menu, panels_layout.horizontal_split ? _("&Above") : _("&Left"));
     menu_set_name (right_menu, panels_layout.horizontal_split ? _("&Below") : _("&Right"));
     menubar_arrange (the_menubar);
-    menubar_set_visible (the_menubar, menubar_visible);
+    widget_set_state (WIDGET (the_menubar), WST_VISIBLE, menubar_visible);
 }
 
 /* --------------------------------------------------------------------------------------------- */

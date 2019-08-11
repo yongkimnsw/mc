@@ -665,7 +665,7 @@ menubar_callback (Widget * w, Widget * sender, widget_msg_t msg, int parm, void 
         return MSG_NOT_HANDLED;
 
     case MSG_DRAW:
-        if (menubar->is_visible || menubar_refresh (menubar))
+        if (widget_get_state (w, WST_VISIBLE) || menubar_refresh (menubar))
             menubar_draw (menubar);
         return MSG_HANDLED;
 
@@ -946,7 +946,8 @@ menubar_new (int y, int x, int cols, GList * menu, gboolean visible)
     /* initially, menubar is not selectable */
     widget_set_options (w, WOP_SELECTABLE, FALSE);
     w->options |= WOP_TOP_SELECT;
-    menubar->is_visible = visible;
+    if (visible)
+        w->state |= WST_VISIBLE;
     menubar_set_menu (menubar, menu);
 
     return menubar;
