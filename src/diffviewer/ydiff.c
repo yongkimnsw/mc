@@ -3470,7 +3470,7 @@ diff_view (const char *file1, const char *file2, const char *label1, const char 
     w->options |= WOP_SELECTABLE;
 
     add_widget (dview_dlg, dview);
-    add_widget (dview_dlg, buttonbar_new (TRUE));
+    add_widget (dview_dlg, buttonbar_new ());
 
     dview_dlg->get_title = dview_get_title;
 

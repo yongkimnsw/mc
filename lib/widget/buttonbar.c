@@ -239,7 +239,7 @@ buttonbar_mouse_callback (Widget * w, mouse_msg_t msg, mouse_event_t * event)
 /* --------------------------------------------------------------------------------------------- */
 
 WButtonBar *
-buttonbar_new (gboolean visible)
+buttonbar_new (void)
 {
     WButtonBar *bb;
     Widget *w;
@@ -249,8 +249,6 @@ buttonbar_new (gboolean visible)
     widget_init (w, LINES - 1, 0, 1, COLS, buttonbar_callback, buttonbar_mouse_callback);
 
     w->pos_flags = WPOS_KEEP_HORZ | WPOS_KEEP_BOTTOM;
-    if (visible)
-        w->state |= WST_VISIBLE;
     widget_want_hotkey (w, TRUE);
 
     return bb;

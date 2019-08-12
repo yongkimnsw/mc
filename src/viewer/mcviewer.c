@@ -243,7 +243,7 @@ mcview_viewer (const char *command, const vfs_path_t * file_vpath, int start_lin
     lc_mcview = mcview_new (0, 0, LINES - 1, COLS, FALSE);
     add_widget (view_dlg, lc_mcview);
 
-    add_widget (view_dlg, buttonbar_new (TRUE));
+    add_widget (view_dlg, buttonbar_new ());
 
     view_dlg->get_title = mcview_get_title;
 

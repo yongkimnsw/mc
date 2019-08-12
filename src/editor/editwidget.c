@@ -1254,7 +1254,7 @@ edit_files (const GList * files)
     add_widget (edit_dlg, menubar);
     edit_init_menu (menubar);
 
-    add_widget (edit_dlg, buttonbar_new (TRUE));
+    add_widget (edit_dlg, buttonbar_new ());
 
     for (file = files; file != NULL; file = g_list_next (file))
     {

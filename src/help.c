@@ -1116,7 +1116,7 @@ help_interactive_display (const gchar * event_group_name, const gchar * event_na
         history[history_ptr].link = selected_item;
     }
 
-    help_bar = buttonbar_new (TRUE);
+    help_bar = buttonbar_new ();
     WIDGET (help_bar)->y -= WIDGET (whelp)->y;
     WIDGET (help_bar)->x -= WIDGET (whelp)->x;
 
