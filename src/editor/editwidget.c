@@ -1250,7 +1250,7 @@ edit_files (const GList * files)
     edit_dlg->get_shortcut = edit_get_shortcut;
     edit_dlg->get_title = edit_get_title;
 
-    menubar = menubar_new (0, 0, COLS, NULL, TRUE);
+    menubar = menubar_new (0, 0, COLS, NULL);
     add_widget (edit_dlg, menubar);
     edit_init_menu (menubar);
 

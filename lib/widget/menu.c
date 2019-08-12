@@ -935,7 +935,7 @@ destroy_menu (menu_t * menu)
 /* --------------------------------------------------------------------------------------------- */
 
 WMenuBar *
-menubar_new (int y, int x, int cols, GList * menu, gboolean visible)
+menubar_new (int y, int x, int cols, GList * menu)
 {
     WMenuBar *menubar;
     Widget *w;
@@ -946,8 +946,6 @@ menubar_new (int y, int x, int cols, GList * menu, gboolean visible)
     /* initially, menubar is not selectable */
     widget_set_options (w, WOP_SELECTABLE, FALSE);
     w->options |= WOP_TOP_SELECT;
-    if (visible)
-        w->state |= WST_VISIBLE;
     menubar_set_menu (menubar, menu);
 
     return menubar;
