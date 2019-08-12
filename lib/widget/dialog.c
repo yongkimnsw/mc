@@ -360,7 +360,7 @@ dlg_mouse_event (WDialog * h, Gpm_Event * event)
     {
         Widget *w = WIDGET (p->data);
 
-        if (widget_is_focusable (w) && w->mouse_callback != NULL)
+        if (!widget_get_state (w, WST_DISABLED) && w->mouse_callback != NULL)
         {
             /* put global cursor position to the widget */
             int ret;
@@ -432,7 +432,7 @@ dlg_try_hotkey (WDialog * h, int d_key)
         current = WIDGET (hot_cur->data);
 
         if (widget_get_options (current, WOP_WANT_HOTKEY)
-            && widget_is_focusable (current))
+            && !widget_get_state (current, WST_DISABLED))
             handled = send_message (current, NULL, MSG_HOTKEY, d_key, NULL);
 
         if (handled == MSG_NOT_HANDLED)
@@ -1054,7 +1054,7 @@ update_cursor (WDialog * h)
     {
         Widget *w = WIDGET (p->data);
 
-        if (widget_is_focusable (w) && widget_get_options (w, WOP_WANT_CURSOR))
+        if (!widget_get_state (w, WST_DISABLED) && widget_get_options (w, WOP_WANT_CURSOR))
             send_message (w, NULL, MSG_CURSOR, 0, NULL);
         else
             do
@@ -1065,7 +1065,7 @@ update_cursor (WDialog * h)
 
                 w = WIDGET (p->data);
 
-                if (widget_is_focusable (w) && widget_get_options (w, WOP_WANT_CURSOR)
+                if (!widget_get_state (w, WST_DISABLED) && widget_get_options (w, WOP_WANT_CURSOR)
                     && send_message (w, NULL, MSG_CURSOR, 0, NULL) == MSG_HANDLED)
                     break;
             }
