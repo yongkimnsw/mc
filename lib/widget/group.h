@@ -62,6 +62,8 @@ void group_select_widget_by_id (const WGroup * g, unsigned long id);
 
 void group_send_broadcast_msg (WGroup * g, widget_msg_t message);
 
+cb_ret_t group_handle_key (WGroup * g, int key);
+
 /* --------------------------------------------------------------------------------------------- */
 /*** inline functions ****************************************************************************/
 /* --------------------------------------------------------------------------------------------- */
