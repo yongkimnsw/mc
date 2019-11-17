@@ -256,6 +256,47 @@ group_default_find_by_id (const Widget * w, unsigned long id)
 }
 
 /* --------------------------------------------------------------------------------------------- */
+
+/**
+ * Modify state of group.
+ *
+ * @param w      group
+ * @param state  widget state flag to modify
+ * @param enable specifies whether to turn the flag on (TRUE) or off (FALSE).
+ *               Only one flag per call can be modified.
+ * @return       MSG_HANDLED if set was handled successfully, MSG_NOT_HANDLED otherwise.
+ */
+cb_ret_t
+group_default_set_state (Widget * w, widget_state_t state, gboolean enable)
+{
+    gboolean ret = MSG_HANDLED;
+
+    ret = widget_default_set_state (w, state, enable);
+
+    if ((w->state & (WST_ACTIVE | WST_SUSPENDED)) != 0)
+    {
+        WGroup *g = GROUP (w);
+
+        if ((w->state & (WST_ACTIVE | WST_FOCUSED)) == (WST_ACTIVE | WST_FOCUSED))
+        {
+            /* select current widget */
+            if (g->current != NULL)
+                widget_set_state (WIDGET (g->current->data), WST_FOCUSED, enable);
+        }
+        else
+        {
+            /* infrom all child groups */
+            GList *iter;
+
+            for (iter = g->widgets; iter != NULL; iter = g_list_next (iter))
+                widget_set_state (WIDGET (iter->data), state, enable);
+        }
+    }
+
+    return ret;
+}
+
+/* --------------------------------------------------------------------------------------------- */
 /**
  * Update cursor position in the active widget of the group.
  *
@@ -504,6 +545,8 @@ group_init (WGroup * g, int y1, int x1, int lines, int cols, widget_cb_fn callba
     w->find = group_default_find;
     w->find_by_type = group_default_find_by_type;
     w->find_by_id = group_default_find_by_id;
+
+    w->set_state = group_default_set_state;
 
     g->mouse_status = MOU_UNHANDLED;
 }
