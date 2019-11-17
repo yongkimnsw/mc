@@ -85,10 +85,6 @@ gboolean xtree_mode = FALSE;
 #define tlines(t) (t->is_panel ? WIDGET (t)->lines - 2 - \
                     (panels_options.show_mini_info ? 2 : 0) : WIDGET (t)->lines)
 
-/* Use the color of the parent widget for the unselected entries */
-#define TREE_NORMALC(h) (h->color[DLG_COLOR_NORMAL])
-#define TREE_CURRENTC(h) (h->color[DLG_COLOR_FOCUS])
-
 /*** file scope type declarations ****************************************************************/
 
 struct WTree
@@ -249,9 +245,11 @@ tree_show_mini_info (WTree * tree, int tree_lines, int tree_cols)
     else
     {
         /* Show full name of selected directory */
-        WDialog *h = DIALOG (w->owner);
 
-        tty_setcolor (tree->is_panel ? NORMAL_COLOR : TREE_NORMALC (h));
+        const int *colors;
+
+        colors = widget_get_colors (w);
+        tty_setcolor (tree->is_panel ? NORMAL_COLOR : colors[DLG_COLOR_NORMAL]);
         tty_draw_hline (w->y + line, w->x + 1, ' ', tree_cols);
         widget_move (w, line, 1);
         tty_print_string (str_fit_to_term
@@ -335,7 +333,10 @@ show_tree (WTree * tree)
     /* Loop for every line */
     for (i = 0; i < tree_lines; i++)
     {
-        tty_setcolor (tree->is_panel ? NORMAL_COLOR : TREE_NORMALC (h));
+        const int *colors;
+
+        colors = widget_get_colors (w);
+        tty_setcolor (tree->is_panel ? NORMAL_COLOR : colors[DLG_COLOR_NORMAL]);
 
         /* Move to the beginning of the line */
         tty_draw_hline (w->y + y + i, w->x + x, ' ', tree_cols);
@@ -347,7 +348,10 @@ show_tree (WTree * tree)
             tty_setcolor (widget_get_state (w, WST_FOCUSED) && current == tree->selected_ptr
                           ? SELECTED_COLOR : NORMAL_COLOR);
         else
-            tty_setcolor (current == tree->selected_ptr ? TREE_CURRENTC (h) : TREE_NORMALC (h));
+            /* *INDENT-OFF* */
+            tty_setcolor (colors [current == tree->selected_ptr
+                                  ? DLG_COLOR_FOCUS : DLG_COLOR_NORMAL]);
+            /* *INDENT-ON* */
 
         tree->tree_shown[i] = current;
         if (current->sublevel == topsublevel)
