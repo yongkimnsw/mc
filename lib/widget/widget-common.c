@@ -599,19 +599,19 @@ widget_replace (Widget * old_w, Widget * new_w)
 void
 widget_select (Widget * w)
 {
-    WDialog *h;
+    WGroup *g;
 
     if (!widget_get_options (w, WOP_SELECTABLE))
         return;
 
-    h = DIALOG (w->owner);
-    if (h != NULL)
+    g = GROUP (w->owner);
+    if (g != NULL)
     {
         if (widget_get_options (w, WOP_TOP_SELECT))
         {
             GList *l;
 
-            l = widget_find (WIDGET (h), w);
+            l = widget_find (WIDGET (g), w);
             widget_reorder (l, TRUE);
         }
 
