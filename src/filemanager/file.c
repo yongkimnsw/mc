@@ -626,21 +626,7 @@ do_compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * ds
     DIR *dir;
     struct dirent *dirent;
     FileProgressStatus ret = FILE_CONT;
-
-    if (!compute_symlinks)
-    {
-        res = mc_lstat (dirname_vpath, &s);
-        if (res != 0)
-            return ret;
-
-        /* don't scan symlink to directory */
-        if (S_ISLNK (s.st_mode))
-        {
-            (*ret_marked)++;
-            *ret_total += (uintmax_t) s.st_size;
-            return ret;
-        }
-    }
+    mc_stat_fn stat_func = compute_symlinks ? mc_stat : mc_lstat;
 
     (*dir_count)++;
 
@@ -657,7 +643,7 @@ do_compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * ds
 
         tmp_vpath = vfs_path_append_new (dirname_vpath, dirent->d_name, (char *) NULL);
 
-        res = mc_lstat (tmp_vpath, &s);
+        res = stat_func (tmp_vpath, &s);
         if (res == 0)
         {
             if (S_ISDIR (s.st_mode))
