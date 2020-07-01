@@ -614,7 +614,7 @@ make_symlink (file_op_context_t * ctx, const char *src_path, const char *dst_pat
 static FileProgressStatus
 do_compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * dsm,
                      size_t * dir_count, size_t * ret_marked, uintmax_t * ret_total,
-                     gboolean compute_symlinks)
+                     mc_stat_fn stat_func)
 {
     static guint64 timestamp = 0;
     /* update with 25 FPS rate */
@@ -626,7 +626,6 @@ do_compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * ds
     DIR *dir;
     struct dirent *dirent;
     FileProgressStatus ret = FILE_CONT;
-    mc_stat_fn stat_func = compute_symlinks ? mc_stat : mc_lstat;
 
     (*dir_count)++;
 
@@ -649,7 +648,7 @@ do_compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * ds
             if (S_ISDIR (s.st_mode))
                 ret =
                     do_compute_dir_size (tmp_vpath, dsm, dir_count, ret_marked, ret_total,
-                                         compute_symlinks);
+                                         stat_func);
             else
             {
                 ret = FILE_CONT;
@@ -686,7 +685,7 @@ do_compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * ds
 
 static FileProgressStatus
 panel_compute_totals (const WPanel * panel, dirsize_status_msg_t * sm, size_t * ret_count,
-                      uintmax_t * ret_total, gboolean compute_symlinks)
+                      uintmax_t * ret_total, mc_stat_fn stat_func)
 {
     int i;
     size_t dir_count = 0;
@@ -706,7 +705,7 @@ panel_compute_totals (const WPanel * panel, dirsize_status_msg_t * sm, size_t * 
             FileProgressStatus status;
 
             p = vfs_path_append_new (panel->cwd_vpath, panel->dir.list[i].fname, (char *) NULL);
-            status = compute_dir_size (p, sm, &dir_count, ret_count, ret_total, compute_symlinks);
+            status = do_compute_dir_size (p, sm, &dir_count, ret_count, ret_total, stat_func);
             vfs_path_free (p);
 
             if (status != FILE_CONT)
@@ -751,13 +750,13 @@ panel_operate_init_totals (const WPanel * panel, const vfs_path_t * source,
 
         if (source == NULL)
             status = panel_compute_totals (panel, &dsm, &ctx->progress_count, &ctx->progress_bytes,
-                                           ctx->follow_links);
+                                           ctx->stat_func);
         else if (S_ISDIR (source_stat->st_mode))
         {
             size_t dir_count = 0;
 
-            status = compute_dir_size (source, &dsm, &dir_count, &ctx->progress_count,
-                                       &ctx->progress_bytes, ctx->follow_links);
+            status = do_compute_dir_size (source, &dsm, &dir_count, &ctx->progress_count,
+                                          &ctx->progress_bytes, ctx->stat_func);
         }
         else
         {
@@ -3182,10 +3181,10 @@ dirsize_status_deinit_cb (status_msg_t * sm)
 FileProgressStatus
 compute_dir_size (const vfs_path_t * dirname_vpath, dirsize_status_msg_t * sm,
                   size_t * ret_dir_count, size_t * ret_marked_count, uintmax_t * ret_total,
-                  gboolean compute_symlinks)
+                  gboolean follow_symlinks)
 {
     return do_compute_dir_size (dirname_vpath, sm, ret_dir_count, ret_marked_count, ret_total,
-                                compute_symlinks);
+                                follow_symlinks ? mc_stat : mc_lstat);
 }
 
 /* --------------------------------------------------------------------------------------------- */
