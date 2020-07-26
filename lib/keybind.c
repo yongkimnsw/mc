@@ -188,7 +188,7 @@ static name_keymap_t command_names[] = {
     ADD_KEYMAP_NAME (SetupListingFormat),
     ADD_KEYMAP_NAME (PanelListing),
 #ifdef LISTMODE_EDITOR
-    ADD_KEYMAP_NAME (ListMode), CK_ListMode}.
+    ADD_KEYMAP_NAME (ListMode),
 #endif
     ADD_KEYMAP_NAME (OptionsPanel),
     ADD_KEYMAP_NAME (CdQuick),
